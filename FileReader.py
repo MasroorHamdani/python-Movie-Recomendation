@@ -36,12 +36,14 @@ class TakeData:
     def read_from_rating_file(self):
         file_object = open('ratings.data', 'r')
         rating_list = []
+        user_list = []
         for line in file_object:
             words = line.split("\t")
             rating_list.append(words[1])
+            user_list.append(words[0])
             #print ratingList
         file_object.close()
-        return rating_list
+        return rating_list,user_list
     
     def most_watched_movie(self,rating_list,movie_data):
         cnt = Counter()
@@ -50,12 +52,20 @@ class TakeData:
         print "Highest watched movies : "
         print movie_data.__getitem__(max(cnt.iteritems(), key=operator.itemgetter(1))[0])
         
-         
+    def most_active_user(self,user_list,user_data):
+        cnt = Counter()
+        for user in user_list:
+            cnt[user] += 1
+        print "Most Active User : "
+        print user_data.__getitem__(max(cnt.iteritems(), key=operator.itemgetter(1))[0])
+        #print movie_data.__getitem__(max(cnt.iteritems(), key=operator.itemgetter(1))[0])
+        
 if __name__ == "__main__":
     s=TakeData()
     movie_data = s.read_from_movie_file()
     user_data = s.read_from_user_file()
     #print movie_data
-    rating_list = s.read_from_rating_file()
-    #print ratingList
+    rating_list , user_list= s.read_from_rating_file()
+    #print user_list
     s.most_watched_movie(rating_list,movie_data)
+    s.most_active_user(user_list,user_data)
